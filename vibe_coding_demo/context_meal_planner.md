@@ -1,0 +1,2 @@
+# What it does
+Plate Forge's core mission is to solve the universal problem of daily meal "decision paralysis" through a highly personalized, AI-driven application. By intelligently synthesizing user data—from physiological metrics to contextual constraints—the application generates flexible, user-centric meal plans and manages shopping list for you.

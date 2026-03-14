@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+temporary screenshots/
+package-lock.json
+
+# Videos are too large for GitHub (>100MB) — store locally or via LFS
+*.mp4
+*.mov
