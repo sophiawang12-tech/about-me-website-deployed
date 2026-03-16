@@ -314,6 +314,36 @@
       margin-top: 8px;
       max-width: 560px;
     }
+    /* ─── Education module layout ─── */
+    .edu-item-inner {
+      display: grid;
+      grid-template-columns: 1fr 88px;
+      align-items: stretch;
+      gap: 24px;
+    }
+    .edu-text { display: flex; flex-direction: column; justify-content: center; gap: 3px; }
+    .edu-text .tl-company { color: #A01818; }
+    .edu-landmark-wrap {
+      display: flex;
+      align-items: stretch;
+    }
+    .edu-landmark {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+      opacity: 0.5;
+      transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .tl-item:hover .edu-landmark {
+      opacity: 0.82;
+      transform: scale(1.05);
+    }
+    @media (max-width: 768px) {
+      .edu-item-inner { grid-template-columns: 1fr; }
+      .edu-landmark-wrap { display: none; }
+    }
+
     .metric-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
     .metric {
       font-family: 'Inter', sans-serif;
@@ -418,26 +448,83 @@
     }
     .play-hint-inner:hover { transform: scale(1.1); }
 
-    /* ─── Tool chips ─── */
-    .tool-chip {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 9px 18px;
-      background: var(--elevated);
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      cursor: default;
-      transition: color 0.3s ease, border-color 0.3s ease,
-                  transform 0.35s cubic-bezier(0.16,1,0.3,1),
-                  box-shadow 0.35s ease;
+    /* ─── Ruler Carousel ─── */
+    .ruler-carousel { width: 100%; user-select: none; }
+
+    .ruler-ticks {
+      position: relative;
+      width: 100%;
+      height: 36px;
     }
-    .tool-chip:hover {
-      color: var(--text);
-      border-color: var(--amber-border);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 28px rgba(160,24,24,0.10);
+    .ruler-tick {
+      position: absolute;
+      width: 1.5px;
+    }
+    .ruler-ticks-top .ruler-tick { top: 0; }
+    .ruler-ticks-bottom .ruler-tick { bottom: 0; }
+
+    .ruler-track-wrapper {
+      width: 100%;
+      height: 72px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .ruler-track {
+      display: flex;
+      align-items: center;
+      gap: 64px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      will-change: transform;
+    }
+    .ruler-item {
+      width: 200px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      cursor: pointer;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      opacity: 0.3;
+      transform-origin: center;
+      will-change: transform, opacity;
+    }
+    .ruler-item.is-active { color: var(--amber); opacity: 1; }
+    .ruler-item svg { flex-shrink: 0; }
+
+    .ruler-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      margin-top: 14px;
+    }
+    .ruler-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(160,24,24,0.55);
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .ruler-btn:hover { color: var(--amber); transform: scale(1.15); }
+    .ruler-counter {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      min-width: 36px;
+      text-align: center;
     }
 
     /* ─── Stats cards ─── */
@@ -627,6 +714,32 @@
       0%,100%{opacity:0.3;transform:scaleY(1)}
       50%    {opacity:1;transform:scaleY(1.08)}
     }
+    /* ─── Keyword highlight ─── */
+    .kw {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-weight: 400;
+      color: #A01818;
+      position: relative;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    .kw::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 100%;
+      height: 1.5px;
+      background: #A01818;
+      transform-origin: left center;
+      transform: scaleX(0);
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .kw.kw-visible::after {
+      transform: scaleX(1);
+    }
+
     .scroll-line {
       width: 1px; height: 56px;
       margin: 0 auto;
@@ -671,6 +784,194 @@
   </div>
 </nav>
 
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section id="hero" style="min-height:100vh; display:flex; align-items:center; padding: 80px 2rem 0; position:relative; overflow:hidden;">
+
+  <!-- ambient glow left -->
+  <div style="position:absolute; top:-180px; left:-120px; width:680px; height:680px;
+    background: radial-gradient(circle, rgba(160,24,24,0.05) 0%, transparent 68%);
+    pointer-events:none;"></div>
+
+  <div class="hero-inner" style="max-width:1160px; margin:0 auto; width:100%; display:flex; align-items:center; gap:11rem;">
+
+    <!-- LEFT: self-portrait -->
+    <div class="reveal reveal-d1" style="flex: 0 0 auto;">
+      <img src="brand_assets/self- portrait/Red and White Modern Minimalist About Me Instagram Post.png" class="hero-ascii"
+        alt="Sibo Wang"
+        style="width:500px; display:block;">
+    </div>
+
+    <!-- RIGHT: text -->
+    <div style="flex:1; min-width:0;">
+      <div class="reveal f-mono sec-label" style="color:var(--text-muted); margin-bottom:1.8rem; letter-spacing:0.22em;">
+        Portfolio &nbsp;·&nbsp; 2026
+      </div>
+
+      <h1 class="reveal reveal-d1 f-display" style="font-size:clamp(3.2rem,6.5vw,5.8rem); line-height:1.02; letter-spacing:-0.025em; color:var(--text);">
+        SIBO<br>WANG
+      </h1>
+
+      <div class="reveal reveal-d2 f-mono" style="margin-top:1.6rem; font-size:clamp(0.72rem,1.3vw,0.86rem); color:var(--text-muted); letter-spacing:0.06em;">
+        AI &nbsp;·&nbsp; Vibe Coding Builder &nbsp;·&nbsp; PM<span class="tw-cursor"></span>
+      </div>
+
+      <div class="reveal reveal-d2" style="width:36px; height:1px; background:var(--amber); margin:22px 0;"></div>
+
+      <p class="reveal reveal-d3" style="max-width:460px; font-size:0.92rem; line-height:1.78; color:var(--text-muted);">
+        I'm a Product Manager who specialize in <span class="kw" data-kw-delay="0">Customer Research</span>, <span class="kw" data-kw-delay="150">Product Design</span> and <span class="kw" data-kw-delay="300">Vibe Coding</span>. My strength lies in uncovering customer/client needs through qualitative and quantitative research, then translating those insights into products that deliver real value to real people.
+      </p>
+
+      <div class="reveal reveal-d3" style="margin-top:2rem;">
+        <a href="#s01"
+          style="display:inline-flex; align-items:center; gap:9px; padding:10px 22px;
+            border:1px solid var(--amber-border); color:var(--amber);
+            font-family:'Inter',sans-serif; font-size:0.7rem; letter-spacing:0.14em;
+            text-decoration:none; border-radius:5px; text-transform:uppercase;
+            transition:background 0.3s ease, border-color 0.3s ease;"
+          onmouseover="this.style.background='rgba(160,24,24,0.09)'"
+          onmouseout="this.style.background='transparent'">
+          Explore &rarr;
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- scroll cue -->
+  <div style="position:absolute; bottom:38px; left:50%; transform:translateX(-50%);">
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════ §01 WHERE I'VE BEEN ══════════════════════ -->
+<section id="s01" style="padding:120px 2rem; position:relative; overflow:hidden;">
+
+  <!-- faint grid texture -->
+  <div style="position:absolute; inset:0; pointer-events:none; opacity:0.025;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;"></div>
+
+  <div style="max-width:1160px; margin:0 auto;">
+
+    <!-- header -->
+    <div data-stagger-group style="margin-bottom:72px;">
+      <span class="sec-label seq-item" data-anim="blur">01</span>
+      <h2 class="sec-title seq-item" data-anim="blur">Where I've<br><em>Been</em></h2>
+      <div class="sec-rule seq-item"></div>
+    </div>
+
+    <!-- ── Education ── -->
+    <div data-stagger-group style="margin-bottom:72px;">
+      <div class="f-mono seq-item" style="font-size:0.62rem; letter-spacing:0.2em; color:var(--text-muted); text-transform:uppercase; margin-bottom:28px;">Education</div>
+
+      <div class="tl-wrap">
+        <div class="tl-spine" id="edu-spine"></div>
+
+        <div class="tl-item seq-item">
+          <div class="edu-item-inner">
+            <div class="edu-text">
+              <div class="tl-company">Tsinghua University</div>
+              <div class="tl-role">Master in Management</div>
+              <span class="f-mono tl-date">09/2024 — 06/2027</span>
+            </div>
+            <div class="edu-landmark-wrap">
+              <img src="brand_assets/university_city_logo/Beijing.PNG" alt="Beijing" class="edu-landmark">
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item seq-item">
+          <div class="edu-item-inner">
+            <div class="edu-text">
+              <div class="tl-company">HEC Paris</div>
+              <div class="tl-role">Master in Management — Exchange Program</div>
+              <span class="f-mono tl-date">01/2026 — 04/2026</span>
+            </div>
+            <div class="edu-landmark-wrap">
+              <img src="brand_assets/university_city_logo/Paris.PNG" alt="Paris" class="edu-landmark">
+            </div>
+          </div>
+        </div>
+
+        <div class="tl-item seq-item" style="padding-bottom:0;">
+          <div class="edu-item-inner">
+            <div class="edu-text">
+              <div class="tl-company">Tianjin University</div>
+              <div class="tl-role">Bachelor in Information Security Management</div>
+              <span class="f-mono tl-date">09/2018 — 07/2024</span>
+            </div>
+            <div class="edu-landmark-wrap">
+              <img src="brand_assets/university_city_logo/Tianjin.PNG" alt="Tianjin" class="edu-landmark">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Experience ── -->
+    <div data-stagger-group>
+      <div class="f-mono seq-item" style="font-size:0.62rem; letter-spacing:0.2em; color:var(--text-muted); text-transform:uppercase; margin-bottom:28px;">Experience</div>
+
+      <div class="tl-wrap">
+        <div class="tl-spine" id="exp-spine"></div>
+
+        <!-- Kuaishou -->
+        <div class="tl-item seq-item">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px; margin-bottom:7px;">
+            <div>
+              <div class="tl-company">Kuaishou Technology</div>
+              <div class="tl-role">AI Product Manager Intern &nbsp;·&nbsp; International Business Dept.</div>
+            </div>
+            <span class="f-mono tl-date">11/2025 — 01/2026</span>
+          </div>
+          <p class="tl-desc">Developed a multi-node AI workflow for automated ad generation targeting clients in Brazil &amp; Indonesia. Improved AIGC stability through prompt engineering and knowledge base optimization.</p>
+          <div class="metric-row">
+            <span class="metric">↓ 20% ad creation cost</span>
+            <span class="metric">20% → 60% video usability</span>
+            <span class="metric">↑ 10% AIGC revenue</span>
+          </div>
+        </div>
+
+        <!-- Meituan -->
+        <div class="tl-item seq-item">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px; margin-bottom:7px;">
+            <div>
+              <div class="tl-company">Meituan</div>
+              <div class="tl-role">Product Manager Intern &nbsp;·&nbsp; Retail Business Dept.</div>
+            </div>
+            <span class="f-mono tl-date">04/2025 — 08/2025</span>
+          </div>
+          <p class="tl-desc">Built an end-to-end customer acquisition tool across engineering, design, and marketing teams for a new retail business line.</p>
+          <div class="metric-row">
+            <span class="metric">↓ 50% CAC</span>
+            <span class="metric">20,000+ new customers/month</span>
+            <span class="metric">↓ 10% service complaints</span>
+          </div>
+        </div>
+
+        <!-- Xiaomi -->
+        <div class="tl-item seq-item" style="padding-bottom:0;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px; margin-bottom:7px;">
+            <div>
+              <div class="tl-company">Xiaomi</div>
+              <div class="tl-role">Product Manager Intern &nbsp;·&nbsp; Internet Business Dept.</div>
+            </div>
+            <span class="f-mono tl-date">12/2024 — 03/2025</span>
+          </div>
+          <p class="tl-desc">Designed a client incentive process for the international ads platform. Conducted competitive research against Huawei &amp; TikTok to optimize ad creation flow and improve customer experience.</p>
+          <div class="metric-row">
+            <span class="metric">↑ 10% oCPC revenue</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
 <!-- ══════════════════════ ABOUT (scroll-driven intro) ══════════════════════ -->
 <section class="about-theater">
   <div class="scroll-wrapper">
@@ -679,7 +980,7 @@
       <div class="bio-layer">
         <p class="bio-text">I work at the intersection of AI and product—where
 ideas become systems that actually run. I <strong>Think</strong> in user
-problems and business outcomes, <strong>Build</strong> AI agents and
+problems and business outcomes, <strong>Build</strong> AI applications and
 automation workflows that cut through complexity, and
 <strong>Ship</strong> solutions that people can measure and trust.</p>
       </div>
@@ -834,187 +1135,6 @@ automation workflows that cut through complexity, and
 </section>
 
 
-<!-- ══════════════════════ HERO ══════════════════════ -->
-<section id="hero" style="min-height:100vh; display:flex; align-items:center; padding: 80px 2rem 0; position:relative; overflow:hidden;">
-
-  <!-- ambient glow left -->
-  <div style="position:absolute; top:-180px; left:-120px; width:680px; height:680px;
-    background: radial-gradient(circle, rgba(160,24,24,0.05) 0%, transparent 68%);
-    pointer-events:none;"></div>
-
-  <div class="hero-inner" style="max-width:1160px; margin:0 auto; width:100%; display:flex; align-items:center; gap:5rem;">
-
-    <!-- LEFT: text -->
-    <div style="flex:1; min-width:0;">
-      <div class="reveal f-mono sec-label" style="color:var(--text-muted); margin-bottom:1.8rem; letter-spacing:0.22em;">
-        Portfolio &nbsp;·&nbsp; 2026
-      </div>
-
-      <h1 class="reveal reveal-d1 f-display" style="font-size:clamp(3.2rem,6.5vw,5.8rem); line-height:1.02; letter-spacing:-0.025em; color:var(--text);">
-        SIBO<br>WANG
-      </h1>
-
-      <div class="reveal reveal-d2 f-mono" style="margin-top:1.6rem; font-size:clamp(0.72rem,1.3vw,0.86rem); color:var(--text-muted); letter-spacing:0.06em;">
-        AI &nbsp;·&nbsp; Vibe Coding Builder &nbsp;·&nbsp; PM<span class="tw-cursor"></span>
-      </div>
-
-      <div class="reveal reveal-d2" style="width:36px; height:1px; background:var(--amber); margin:22px 0;"></div>
-
-      <p class="reveal reveal-d3" style="max-width:460px; font-size:0.92rem; line-height:1.78; color:var(--text-muted);">
-        I build AI-powered apps that solve real pain points,
-        share what I learn on social platforms, and direct
-        short films when I'm not shipping code.
-      </p>
-
-      <div class="reveal reveal-d3" style="margin-top:2rem;">
-        <a href="#s01"
-          style="display:inline-flex; align-items:center; gap:9px; padding:10px 22px;
-            border:1px solid var(--amber-border); color:var(--amber);
-            font-family:'Inter',sans-serif; font-size:0.7rem; letter-spacing:0.14em;
-            text-decoration:none; border-radius:5px; text-transform:uppercase;
-            transition:background 0.3s ease, border-color 0.3s ease;"
-          onmouseover="this.style.background='rgba(160,24,24,0.09)'"
-          onmouseout="this.style.background='transparent'">
-          Explore &rarr;
-        </a>
-      </div>
-    </div>
-
-    <!-- RIGHT: ASCII portrait -->
-    <div class="reveal reveal-d1" style="flex: 0 0 auto;">
-      <img src="brand_assets/ascii-art.png" class="hero-ascii"
-        alt="Sibo Wang"
-        style="width:100%; max-width:420px; display:block; opacity:0.82; filter:contrast(1.1);">
-    </div>
-
-  </div>
-
-  <!-- scroll cue -->
-  <div style="position:absolute; bottom:38px; left:50%; transform:translateX(-50%);">
-    <div class="scroll-line"></div>
-  </div>
-</section>
-
-<!-- ══════════════════════ §01 WHERE I'VE BEEN ══════════════════════ -->
-<section id="s01" style="padding:120px 2rem; position:relative; overflow:hidden;">
-
-  <!-- faint grid texture -->
-  <div style="position:absolute; inset:0; pointer-events:none; opacity:0.025;
-    background-image: linear-gradient(var(--border) 1px, transparent 1px),
-                      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px;"></div>
-
-  <div style="max-width:1160px; margin:0 auto;">
-
-    <!-- header -->
-    <div data-stagger-group style="margin-bottom:72px;">
-      <span class="sec-label seq-item" data-anim="blur">01</span>
-      <h2 class="sec-title seq-item" data-anim="blur">Where I've<br><em>Been</em></h2>
-      <div class="sec-rule seq-item"></div>
-    </div>
-
-    <!-- ── Education ── -->
-    <div data-stagger-group style="margin-bottom:72px;">
-      <div class="f-mono seq-item" style="font-size:0.62rem; letter-spacing:0.2em; color:var(--text-muted); text-transform:uppercase; margin-bottom:28px;">Education</div>
-
-      <div class="tl-wrap">
-        <div class="tl-spine" id="edu-spine"></div>
-
-        <div class="tl-item seq-item">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px;">
-            <div>
-              <div class="tl-company">Tsinghua University</div>
-              <div class="tl-role">Master in Management</div>
-            </div>
-            <span class="f-mono tl-date">09/2024 — 06/2027</span>
-          </div>
-        </div>
-
-        <div class="tl-item seq-item">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px;">
-            <div>
-              <div class="tl-company">HEC Paris</div>
-              <div class="tl-role">Master in Management — Exchange Program</div>
-            </div>
-            <span class="f-mono tl-date">01/2026 — 04/2026</span>
-          </div>
-        </div>
-
-        <div class="tl-item seq-item" style="padding-bottom:0;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px;">
-            <div>
-              <div class="tl-company">Tianjin University</div>
-              <div class="tl-role">Bachelor in Information Security Management</div>
-            </div>
-            <span class="f-mono tl-date">09/2018 — 07/2024</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Experience ── -->
-    <div data-stagger-group>
-      <div class="f-mono seq-item" style="font-size:0.62rem; letter-spacing:0.2em; color:var(--text-muted); text-transform:uppercase; margin-bottom:28px;">Experience</div>
-
-      <div class="tl-wrap">
-        <div class="tl-spine" id="exp-spine"></div>
-
-        <!-- Kuaishou -->
-        <div class="tl-item seq-item">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px; margin-bottom:7px;">
-            <div>
-              <div class="tl-company">Kuaishou Technology</div>
-              <div class="tl-role">AI Product Manager Intern &nbsp;·&nbsp; International Business Dept.</div>
-            </div>
-            <span class="f-mono tl-date">11/2025 — 01/2026</span>
-          </div>
-          <p class="tl-desc">Developed a multi-node AI workflow for automated ad generation targeting clients in Brazil &amp; Indonesia. Improved AIGC stability through prompt engineering and knowledge base optimization.</p>
-          <div class="metric-row">
-            <span class="metric">↓ 20% ad creation cost</span>
-            <span class="metric">20% → 60% video usability</span>
-            <span class="metric">↑ 10% AIGC revenue</span>
-          </div>
-        </div>
-
-        <!-- Meituan -->
-        <div class="tl-item seq-item">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px; margin-bottom:7px;">
-            <div>
-              <div class="tl-company">Meituan</div>
-              <div class="tl-role">Product Manager Intern &nbsp;·&nbsp; Retail Business Dept.</div>
-            </div>
-            <span class="f-mono tl-date">04/2025 — 08/2025</span>
-          </div>
-          <p class="tl-desc">Built an end-to-end customer acquisition tool across engineering, design, and marketing teams for a new retail business line.</p>
-          <div class="metric-row">
-            <span class="metric">↓ 50% CAC</span>
-            <span class="metric">20,000+ new customers/month</span>
-            <span class="metric">↓ 10% service complaints</span>
-          </div>
-        </div>
-
-        <!-- Xiaomi -->
-        <div class="tl-item seq-item" style="padding-bottom:0;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:6px; margin-bottom:7px;">
-            <div>
-              <div class="tl-company">Xiaomi</div>
-              <div class="tl-role">Product Manager Intern &nbsp;·&nbsp; Internet Business Dept.</div>
-            </div>
-            <span class="f-mono tl-date">12/2024 — 03/2025</span>
-          </div>
-          <p class="tl-desc">Designed a client incentive process for the international ads platform. Conducted competitive research against Huawei &amp; TikTok to optimize ad creation flow and improve customer experience.</p>
-          <div class="metric-row">
-            <span class="metric">↑ 10% oCPC revenue</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
 <!-- ══════════════════════ §02 WHAT I BUILD ══════════════════════ -->
 <section id="s02" style="padding:120px 2rem; background:var(--surface); position:relative; overflow:hidden;">
 
@@ -1050,7 +1170,7 @@ automation workflows that cut through complexity, and
           </div>
         </div>
         <div class="card-body">
-          <div class="card-tag">Hackathon · 2026</div>
+          <div class="card-tag">Google Gemini Hackathon</div>
           <div class="card-title">MelodySnap</div>
           <p class="card-desc">Turn any photo into a one-of-a-kind song. Snap, generate, then merge music and photo into a video gift card — powered by Gemini 3 Flash and Google Lyria.</p>
           <div class="card-tech">
@@ -1109,42 +1229,23 @@ automation workflows that cut through complexity, and
 
     <!-- AI Tools -->
     <div data-stagger-group>
-      <div class="f-mono seq-item" style="font-size:0.62rem; letter-spacing:0.2em; color:var(--text-muted); text-transform:uppercase; margin-bottom:20px;">Tools I Use Daily</div>
-      <div style="display:flex; flex-wrap:wrap; gap:12px;">
+      <h3 class="seq-item" style="font-family:'Libre Baskerville',serif; font-size:clamp(1.35rem,2.2vw,1.5rem); font-weight:400; line-height:1.3; letter-spacing:-0.025em; color:#A01818; margin-bottom:32px;">Tools &amp; Skills I'm Good at</h3>
 
-        <div class="tool-chip seq-item">
-          <!-- Claude icon -->
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-            <path d="M8 12h8M12 8v8" stroke-linecap="round"/>
-          </svg>
-          Claude
+      <div class="ruler-carousel seq-item" id="tool-carousel">
+        <div class="ruler-ticks ruler-ticks-top" id="ruler-ticks-top"></div>
+        <div class="ruler-track-wrapper">
+          <div class="ruler-track" id="ruler-track"></div>
         </div>
-
-        <div class="tool-chip seq-item">
-          <!-- Cursor icon -->
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M4 4l7 18 3-7 7-3L4 4z" stroke-linejoin="round"/>
-          </svg>
-          Cursor
+        <div class="ruler-ticks ruler-ticks-bottom" id="ruler-ticks-bottom"></div>
+        <div class="ruler-nav">
+          <button class="ruler-btn" id="ruler-prev" aria-label="Previous">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>
+          </button>
+          <span class="ruler-counter"><span id="ruler-current">1</span> / <span id="ruler-total">6</span></span>
+          <button class="ruler-btn" id="ruler-next" aria-label="Next">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+          </button>
         </div>
-
-        <div class="tool-chip seq-item">
-          <!-- Lovable icon -->
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-          Lovable
-        </div>
-
-        <div class="tool-chip seq-item">
-          <!-- Gemini icon -->
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-          </svg>
-          Gemini
-        </div>
-
       </div>
     </div>
 
@@ -1308,7 +1409,7 @@ automation workflows that cut through complexity, and
     requestAnimationFrame(animRing);
   })();
 
-  document.querySelectorAll('a, button, .app-card, .film-card, .tool-chip, .platform-badge').forEach(el => {
+  document.querySelectorAll('a, button, .app-card, .film-card, .tool-chip, .ruler-item, .ruler-btn, .platform-badge').forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('cursor-expand'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-expand'));
   });
@@ -1465,6 +1566,169 @@ automation workflows that cut through complexity, and
       setTimeout(() => el.classList.add('in'), i * 90);
     });
   }, 80);
+
+  /* ── Ruler Carousel ── */
+  (function() {
+    const ITEM_W = 200; // px — must match CSS .ruler-item width
+    const GAP    = 64;  // px — must match CSS .ruler-track gap
+    const SLOT   = ITEM_W + GAP;
+
+    const tools = [
+      { name: 'Claude',
+        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h8M12 8v8" stroke-linecap="round"/></svg>' },
+      { name: 'Cursor',
+        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l7 18 3-7 7-3L4 4z" stroke-linejoin="round"/></svg>' },
+      { name: 'Lovable',
+        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' },
+      { name: 'Gemini',
+        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' },
+      { name: 'Prompt Engineering',
+        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>' },
+      { name: 'Agent Evals',
+        icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>' },
+    ];
+
+    const n = tools.length;
+
+    // Build infinite list: 3 copies so wrapping is seamless
+    const allItems = [];
+    for (let copy = 0; copy < 3; copy++) {
+      tools.forEach((t, i) => allItems.push({ ...t, copy, origIdx: i }));
+    }
+
+    const track      = document.getElementById('ruler-track');
+    const counterEl  = document.getElementById('ruler-current');
+    const totalEl    = document.getElementById('ruler-total');
+    totalEl.textContent = n;
+
+    // Build item DOM nodes
+    const itemEls = allItems.map((item) => {
+      const el = document.createElement('div');
+      el.className = 'ruler-item';
+      el.innerHTML = item.icon + '<span>' + item.name + '</span>';
+      track.appendChild(el);
+      return el;
+    });
+
+    // Start at middle copy, item 0
+    let activeIdx = n;
+
+    function targetX(idx) {
+      // Center of item[idx] should align with wrapper center (left: 50%)
+      return -(idx * SLOT + ITEM_W / 2);
+    }
+
+    function updateVisuals(animate) {
+      const realIdx = ((activeIdx % n) + n) % n;
+      counterEl.textContent = realIdx + 1;
+
+      itemEls.forEach((el, i) => {
+        const isActive = i === activeIdx;
+        el.classList.toggle('is-active', isActive);
+        if (animate) {
+          gsap.to(el, {
+            scale:    isActive ? 1.18 : 0.65,
+            opacity:  isActive ? 1    : 0.28,
+            duration: isActive ? 0.55 : 0.4,
+            ease:     isActive ? 'back.out(1.6)' : 'power2.out',
+            overwrite: 'auto'
+          });
+        } else {
+          gsap.set(el, {
+            scale:   isActive ? 1.18 : 0.65,
+            opacity: isActive ? 1    : 0.28,
+          });
+        }
+      });
+    }
+
+    // Set initial state (no animation)
+    gsap.set(track, { x: targetX(activeIdx) });
+    updateVisuals(false);
+
+    function goTo(newIdx) {
+      activeIdx = newIdx;
+      const wrapIdx = activeIdx < n       ? activeIdx + n
+                    : activeIdx >= n * 2  ? activeIdx - n
+                    : null;
+      gsap.to(track, {
+        x: targetX(activeIdx),
+        duration: 0.65,
+        ease: 'back.out(1.2)',
+        overwrite: true,
+        onComplete: wrapIdx !== null ? () => {
+          activeIdx = wrapIdx;
+          gsap.set(track, { x: targetX(activeIdx) });
+          updateVisuals(false);
+        } : undefined
+      });
+      updateVisuals(true);
+    }
+
+    // Click on any item
+    itemEls.forEach((el, i) => {
+      el.addEventListener('click', () => {
+        const origTarget = i % n;
+        const candidates = [origTarget, origTarget + n, origTarget + n * 2];
+        let closest = candidates[0], minDist = Math.abs(candidates[0] - activeIdx);
+        candidates.forEach(c => {
+          const d = Math.abs(c - activeIdx);
+          if (d < minDist) { minDist = d; closest = c; }
+        });
+        if (closest !== activeIdx) goTo(closest);
+      });
+    });
+
+    document.getElementById('ruler-prev').addEventListener('click', () => goTo(activeIdx - 1));
+    document.getElementById('ruler-next').addEventListener('click', () => goTo(activeIdx + 1));
+
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('tool-carousel')) return;
+      if (e.key === 'ArrowLeft')  goTo(activeIdx - 1);
+      if (e.key === 'ArrowRight') goTo(activeIdx + 1);
+    });
+
+    // Scroll to navigate
+    let scrollLock = false;
+    document.getElementById('tool-carousel').addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (scrollLock) return;
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (Math.abs(delta) < 12) return;
+      scrollLock = true;
+      setTimeout(() => { scrollLock = false; }, 650);
+      if (delta > 0) goTo(activeIdx + 1);
+      else           goTo(activeIdx - 1);
+    }, { passive: false });
+
+    // Build ruler ticks
+    function buildTicks(containerId, totalLines) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      for (let i = 0; i < totalLines; i++) {
+        const tick = document.createElement('div');
+        tick.className = 'ruler-tick';
+        tick.style.left = ((i / (totalLines - 1)) * 100) + '%';
+        const isCenter = i === Math.floor(totalLines / 2);
+        const isFifth  = i % 5 === 0;
+        if (isCenter) {
+          tick.style.height     = '28px';
+          tick.style.background = '#A01818';
+          tick.style.opacity    = '1';
+        } else if (isFifth) {
+          tick.style.height     = '16px';
+          tick.style.background = '#A01818';
+          tick.style.opacity    = '0.4';
+        } else {
+          tick.style.height     = '8px';
+          tick.style.background = 'rgba(90,82,72,0.22)';
+        }
+        container.appendChild(tick);
+      }
+    }
+    buildTicks('ruler-ticks-top',    80);
+    buildTicks('ruler-ticks-bottom', 80);
+  })();
 </script>
 
 <script>
@@ -1664,6 +1928,21 @@ afterFonts.then(() => {
     }
   });
 });
+
+// ─── Keyword highlight: draw underline on scroll entry ───
+(function() {
+  var para = document.querySelector('p.reveal.reveal-d3');
+  if (!para) return;
+  var observer = new IntersectionObserver(function(entries) {
+    if (!entries[0].isIntersecting) return;
+    observer.disconnect();
+    para.querySelectorAll('.kw').forEach(function(kw) {
+      var delay = parseInt(kw.getAttribute('data-kw-delay') || '0', 10);
+      setTimeout(function() { kw.classList.add('kw-visible'); }, delay + 200);
+    });
+  }, { threshold: 0.5 });
+  observer.observe(para);
+})();
 </script>
 </body>
 </html>
