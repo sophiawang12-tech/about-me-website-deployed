@@ -681,11 +681,13 @@
       -webkit-backdrop-filter: blur(10px);
     }
     #modal.open { opacity: 1; pointer-events: all; }
-    #modal-video {
-      max-width: 88vw;
-      max-height: 84vh;
+    #modal-iframe {
+      width: 88vw;
+      height: 84vh;
+      max-width: 1200px;
       border-radius: 8px;
       box-shadow: 0 40px 120px rgba(30,24,20,0.7);
+      border: none;
     }
     #modal-close {
       position: absolute; top: 22px; right: 28px;
@@ -751,7 +753,7 @@
 <!-- ══════════════════════ MODAL ══════════════════════ -->
 <div id="modal">
   <span id="modal-close">[ ESC / CLOSE ]</span>
-  <video id="modal-video" controls playsinline></video>
+  <iframe id="modal-iframe" frameborder="0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
 </div>
 
 <!-- ══════════════════════ NAV ══════════════════════ -->
@@ -1141,10 +1143,9 @@ automation workflows that cut through complexity, and
     <div class="apps-grid" data-stagger-group style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-bottom:72px;">
 
       <!-- MelodySnap -->
-      <div class="app-card seq-item" id="card-melody" onclick="openModal('vibe_coding_demo/melody%20snap.mov')">
-        <div class="card-media">
+      <div class="app-card seq-item" id="card-melody" onclick="openModal('Y9q59SlUCFA')">
+        <div class="card-media" data-ytid="Y9q59SlUCFA">
           <img src="vibe_coding_demo/cover_melody_snap.png" alt="MelodySnap cover">
-          <video id="vid-melody" src="vibe_coding_demo/melody%20snap.mov" muted loop playsinline preload="none"></video>
           <div class="play-hint">
             <div class="play-hint-inner">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--amber)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -1164,10 +1165,9 @@ automation workflows that cut through complexity, and
       </div>
 
       <!-- Plate Forge -->
-      <div class="app-card seq-item" id="card-meal" onclick="openModal('vibe_coding_demo/meal%20planner.mov')">
-        <div class="card-media">
+      <div class="app-card seq-item" id="card-meal" onclick="openModal('bHqZtGj48RU')">
+        <div class="card-media" data-ytid="bHqZtGj48RU">
           <img src="vibe_coding_demo/cover_meal_planner.png" alt="Plate Forge cover">
-          <video id="vid-meal" src="vibe_coding_demo/meal%20planner.mov" muted loop playsinline preload="none"></video>
           <div class="play-hint">
             <div class="play-hint-inner">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--amber)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -1186,10 +1186,9 @@ automation workflows that cut through complexity, and
       </div>
 
       <!-- SnapCook -->
-      <div class="app-card seq-item" id="card-snap" onclick="openModal('vibe_coding_demo/Snap%20Cook.mov')">
-        <div class="card-media">
+      <div class="app-card seq-item" id="card-snap" onclick="openModal('CQB4vkL4ufs')">
+        <div class="card-media" data-ytid="CQB4vkL4ufs">
           <img src="vibe_coding_demo/cover_snap_cook.png" alt="SnapCook cover">
-          <video id="vid-snap" src="vibe_coding_demo/Snap%20Cook.mov" muted loop playsinline preload="none"></video>
           <div class="play-hint">
             <div class="play-hint-inner">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--amber)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -1318,8 +1317,7 @@ automation workflows that cut through complexity, and
       <div class="film-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:22px;">
 
         <!-- Short Film -->
-        <div class="film-card seq-item" id="film-short" style="position:relative; aspect-ratio:16/9;" onclick="openModal('film%20work/short%20film.mp4')">
-          <video id="vid-short" src="film%20work/short%20film.mp4" muted loop playsinline preload="none"></video>
+        <div class="film-card seq-item" id="film-short" style="position:relative; aspect-ratio:16/9;" onclick="openModal('YEHYrvp83Jc')" data-ytid="YEHYrvp83Jc">
           <img src="film%20work/cover_short_film.png" alt="Short Film">
           <div class="film-overlay"></div>
           <div class="film-play">
@@ -1334,8 +1332,7 @@ automation workflows that cut through complexity, and
         </div>
 
         <!-- Chudian -->
-        <div class="film-card seq-item" id="film-chudian" style="position:relative; aspect-ratio:16/9;" onclick="openModal('film%20work/chudian.mp4')">
-          <video id="vid-chudian" src="film%20work/chudian.mp4" muted loop playsinline preload="none"></video>
+        <div class="film-card seq-item" id="film-chudian" style="position:relative; aspect-ratio:16/9;" onclick="openModal('nfN7o-J5dPQ')" data-ytid="nfN7o-J5dPQ">
           <img src="film%20work/cover_chudian.png" alt="ChuDian">
           <div class="film-overlay"></div>
           <div class="film-play">
@@ -1397,21 +1394,18 @@ automation workflows that cut through complexity, and
   });
 
   /* ── Modal ── */
-  const modal      = document.getElementById('modal');
-  const modalVideo = document.getElementById('modal-video');
+  const modal       = document.getElementById('modal');
+  const modalIframe = document.getElementById('modal-iframe');
 
-  window.openModal = function(src) {
-    modalVideo.src = src;
-    modalVideo.load();
+  window.openModal = function(ytId) {
+    modalIframe.src = 'https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0&modestbranding=1';
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
-    setTimeout(() => modalVideo.play().catch(() => {}), 120);
   };
 
   window.closeModal = function() {
     modal.classList.remove('open');
-    modalVideo.pause();
-    modalVideo.src = '';
+    modalIframe.src = '';
     document.body.style.overflow = '';
   };
 
@@ -1461,45 +1455,38 @@ automation workflows that cut through complexity, and
 
   document.querySelectorAll('[data-stagger-group]').forEach(el => staggerObs.observe(el));
 
-  /* ── App card hover video preview ── */
-  const cardVideoMap = [
-    { card: 'card-melody', vid: 'vid-melody' },
-    { card: 'card-meal',   vid: 'vid-meal'   },
-    { card: 'card-snap',   vid: 'vid-snap'   },
-  ];
-  cardVideoMap.forEach(({ card, vid }) => {
-    const cardEl = document.getElementById(card);
-    const vidEl  = document.getElementById(vid);
-    if (!cardEl || !vidEl) return;
+  /* ── Hover YouTube preview (app cards + film cards) ── */
+  function setupYTHover(containerSelector, iframeStyle) {
+    document.querySelectorAll(containerSelector).forEach(function(container) {
+      var ytid = container.getAttribute('data-ytid');
+      if (!ytid) return;
+      var hoverIframe = null;
 
-    cardEl.addEventListener('mouseenter', () => {
-      cardEl.classList.add('playing');
-      vidEl.play().catch(() => {});
+      container.addEventListener('mouseenter', function() {
+        container.closest('.app-card, .film-card').classList.add('playing');
+        hoverIframe = document.createElement('iframe');
+        hoverIframe.src = 'https://www.youtube.com/embed/' + ytid +
+          '?autoplay=1&mute=1&loop=1&playlist=' + ytid +
+          '&controls=0&rel=0&modestbranding=1&playsinline=1';
+        hoverIframe.setAttribute('frameborder', '0');
+        hoverIframe.setAttribute('allow', 'autoplay');
+        Object.assign(hoverIframe.style, iframeStyle);
+        container.appendChild(hoverIframe);
+      });
+      container.addEventListener('mouseleave', function() {
+        container.closest('.app-card, .film-card').classList.remove('playing');
+        if (hoverIframe) { hoverIframe.remove(); hoverIframe = null; }
+      });
     });
-    cardEl.addEventListener('mouseleave', () => {
-      cardEl.classList.remove('playing');
-      vidEl.pause();
-      vidEl.currentTime = 0;
-    });
+  }
+
+  setupYTHover('.card-media[data-ytid]', {
+    position: 'absolute', inset: '0', width: '100%', height: '100%',
+    objectFit: 'cover', borderRadius: '0', zIndex: '2', pointerEvents: 'none'
   });
-
-  /* ── Film card hover video preview ── */
-  [
-    { card: 'film-short',   vid: 'vid-short'   },
-    { card: 'film-chudian', vid: 'vid-chudian' },
-  ].forEach(({ card, vid }) => {
-    const cardEl = document.getElementById(card);
-    const vidEl  = document.getElementById(vid);
-    if (!cardEl || !vidEl) return;
-    cardEl.addEventListener('mouseenter', () => {
-      cardEl.classList.add('playing');
-      vidEl.play().catch(() => {});
-    });
-    cardEl.addEventListener('mouseleave', () => {
-      cardEl.classList.remove('playing');
-      vidEl.pause();
-      vidEl.currentTime = 0;
-    });
+  setupYTHover('.film-card[data-ytid]', {
+    position: 'absolute', inset: '0', width: '100%', height: '100%',
+    objectFit: 'cover', borderRadius: '0', zIndex: '2', pointerEvents: 'none'
   });
 
   /* ── Counter animation ── */
